@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.5.1",
+    "discord.js-commando": "^0.10.0",
     "ffmpeg": "^0.0.4",
     "opusscript": "^0.0.7",
-    "ytdl-core": "^1.0.0"
+    "ytdl-core": "^1.0.0",
+    "ytsr": "^0.1.8"
   }
 }

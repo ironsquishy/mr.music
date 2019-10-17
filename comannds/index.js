@@ -1,11 +1,15 @@
-const prefix = '!'
+const options = require('./options');
+const { prefix } = require('../config');
+
 
 const call = (command, params) => {
     switch (command) {
         case `${prefix}play`:
-            ommands[command].run([...params])
+            commands[command].run([...params])
             break
         default:
             //command not found
     }
 }
+
+module.exports = exports = call;
