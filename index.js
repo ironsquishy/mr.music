@@ -43,8 +43,6 @@ async function onMessage(message) {
 
     const [command, arg] = Utils.tokenizeArgs(message.content);
 
-
-    /*Do command options here*/
     switch(command){
         case `${prefix}connect`:
             message.reply('Connecting...');
@@ -61,9 +59,17 @@ async function onMessage(message) {
         case `${prefix}leave`:
             Options.leaveVoice(message);
             break;
-            
+        case `${prefix}pause`:
+            Options.pauseVoice(message);
+            break;
+
+        case `${prefix}resume`:
+            Options.resumeVoice(message);
+            break;
+
         default:
             message.reply('Invalid arguement!');
+
     }
     
     

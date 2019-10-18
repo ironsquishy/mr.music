@@ -48,16 +48,17 @@ class Youtube {
         }
 
         try {
-            const connection = await msg.member.voiceChannel.join();
-            msg.channel.send('Searching for song...');
-            
             if(!YTDL.validateURL(url)) throw 'Youtube url invalid!';
-            msg.channel.send('Playing song');
+
+            const connection = await msg.member.voiceChannel.join();
+
+            msg.channel.send('Searching for song...');
 
             const dispatch = connection.playStream(YTDL(url, {filter : 'audio'}));
             dispatch.setVolume(0.25);
             youtubePlay = dispatch;
 
+            msg.channel.send('Playing...');
             dispatch.on('end', () =>{});
             dispatch.on('error', e => console.warn);
 
@@ -85,7 +86,7 @@ class Youtube {
             msg.channel.send('Searching for song...');
 
             const response = await searchResults(query);
-            msg.channel.send(`Found & play -> Title: ${response.title} by ${response.author}`);
+            msg.channel.send(`Play -> Title: ${response.title} by ${response.author}`);
             
             
             const dispatch = connection.playStream(YTDL(response.url, {filter : 'audio'}));

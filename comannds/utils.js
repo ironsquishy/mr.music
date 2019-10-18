@@ -10,8 +10,12 @@ function isValidURL(str){
     }
 }
 
+
 function tokenizeArgs(str){
+    //Ex. !youtube take me home -> ['#youtube', 'take me home'];
     return str.split(/(?<=^\S+)\s/);
 }
+
+
 
 module.exports = { isBot, isValidURL, tokenizeArgs }
