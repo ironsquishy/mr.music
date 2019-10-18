@@ -1,6 +1,3 @@
-//https://discordapp.com/oauth2/authorize?client_id=634428722879004672&scope=bot&permissions=36771904
-//Discord native-> https://discordapp.com/api/oauth2/authorize?client_id=634428722879004672&permissions=36771904&scope=bot
-
 const Discord = require('discord.js');
 const YTDL = require('ytdl-core');
 
@@ -11,11 +8,9 @@ const client = new Discord.Client();
 /*Features*/
 const Youtube = require('./comannds/youtube');
 
-/*Utils*/
+/*Utils & Options*/
 const Utils = require('./comannds/utils');
-
-/*Temp and needs future proofing*/
-var mrmusicPLaying = null;
+const Options = require('./comannds/options');
 
 client.login(token);
 
@@ -37,10 +32,13 @@ async function onDisconnect () {
 
 async function onMessage(message) {
 
+    //If message author is bot
     if(message.author.username === client.user.username) return;
 
+    //If it does not start with prefix
     if(!message.content.startsWith(prefix)) return;
 
+    //No current server present
     if(!message.guild) return;
 
     const [command, arg] = Utils.tokenizeArgs(message.content);
@@ -59,25 +57,14 @@ async function onMessage(message) {
         case `${prefix}youtube`:
             Youtube.play(message, arg);
             break;
-        
-        case `${prefix}youtubesearch`:
-            Youtube.searchPlay(message, arg);
-            break;
+
         case `${prefix}leave`:
-            leaveVoice(message);
+            Options.leaveVoice(message);
             break;
+            
         default:
             message.reply('Invalid arguement!');
     }
     
     
-}
-
-
-function leaveVoice(msg){
-    if(msg.guild.voiceConnection){
-        msg.guild.voiceConnection.disconnect();
-    } else {
-        msg.reply('I must be in a voice to be leave!?!?!?');
-    }
 }

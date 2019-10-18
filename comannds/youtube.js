@@ -2,6 +2,7 @@ const YTDL = require('ytdl-core');
 const YTSR = require('ytsr');
 const Utils = require('./utils');
 
+var youtubePlay = null;
 
 async function searchResults(query){
     try {
@@ -20,7 +21,7 @@ async function searchResults(query){
 
 
 class Youtube {
-
+    
     constructor(){
 
     }
@@ -41,21 +42,28 @@ class Youtube {
             return;
         }
 
+        if(youtubePlay){
+            youtubePlay.end();
+            youtubePlay = null
+        }
+
         try {
             const connection = await msg.member.voiceChannel.join();
             msg.channel.send('Searching for song...');
             
             if(!YTDL.validateURL(url)) throw 'Youtube url invalid!';
             msg.channel.send('Playing song');
+
             const dispatch = connection.playStream(YTDL(url, {filter : 'audio'}));
-
             dispatch.setVolume(0.25);
+            youtubePlay = dispatch;
 
-            dispatch.on('end', ()=> connection.disconnect());
+            dispatch.on('end', () =>{});
             dispatch.on('error', e => console.warn);
+
             return url;
         } catch (err){
-            msg.channel.send(`Error: ${err.toString()}`);
+            console.warn(err);
         }
     }
 
@@ -64,22 +72,32 @@ class Youtube {
         if(!msg.member.voiceChannel){
             msg.reply('You will need to be in voice to use youtube play.');
             return;
-        }  
+        } 
+
+        if(youtubePlay){
+            youtubePlay.end();
+            youtubePlay = null
+        }
+
         try {
+            
             const connection = await msg.member.voiceChannel.join();
             msg.channel.send('Searching for song...');
 
             const response = await searchResults(query);
             msg.channel.send(`Found & play -> Title: ${response.title} by ${response.author}`);
             
+            
             const dispatch = connection.playStream(YTDL(response.url, {filter : 'audio'}));
             dispatch.setVolume(0.25);
+            youtubePlay = dispatch;
 
-            dispatch.on('end', ()=> connection.disconnect());
+            dispatch.on('end', () =>{});
             dispatch.on('error', e => console.warn);
+
             return response.url;
         } catch (err){
-            msg.channel.send(`Error: ${err.toString()}`);
+            console.warn(err);
         }
     }
 
